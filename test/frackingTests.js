@@ -177,11 +177,11 @@ describe('Convert to a single fractional string from number', function(){
 			base: 2,
 			primaryDivisor: 2,
 			secondaryDivisor: 1
-		}
+		};
 
-		assert.equal(fracker.toStringFromFloat(0, priceConversionObj), '0');
-		assert.equal(fracker.toStringFromFloat(11.0, priceConversionObj), '11');
-		assert.equal(fracker.toStringFromFloat(99.5, priceConversionObj), '99 1/2');
+		assert.equal(fracker.toFractionalFromFloat(0, priceConversionObj), '0');
+		assert.equal(fracker.toFractionalFromFloat(11.0, priceConversionObj), '11');
+		assert.equal(fracker.toFractionalFromFloat(99.5, priceConversionObj), '99 1/2');
 		
 	});
 	it('test2')

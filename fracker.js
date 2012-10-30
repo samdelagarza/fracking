@@ -9,8 +9,7 @@ getRemainder = function(number){
 	return (number.toString()).split('.')[1];
 },
 isFloat = function(number){
-	var d = getRemainder(number);
-	return d !== 0;
+	return  (number % 1) > 0;
 },
 getFixedLength = function(number, displayType) {
 	var fixedLength = (displayType.primaryDivisor.toString()).length-1,
@@ -23,6 +22,22 @@ getFixedLength = function(number, displayType) {
 	fixedLength;
 
 	return fixedLength;
+},
+getParts = function (number, delimeters) {
+	var delimiter = delimeters[0],
+		n = (number).toString().split(delimiter),
+		wholeNumber, remainder, fractional;
+
+		wholeNumber = n[0];
+		remainder = n[1];
+
+	return [wholeNumber, remainder];
+},
+convertToFractional = function(parts, displayType) {
+	var power = Math.log(parts[1]);
+	console.log('power: ', power);
+
+	return parts.join(' ');
 },
 f = {
 	toStringFromFloat: function(number, displayType) {
@@ -41,26 +56,23 @@ f = {
 			// console.log((number.toFixed(fixedLength)));
 			// console.log(fixedLength);
 
-			if(isFloat(number)){
-				val = (fixedLength===0 ? 
-								number : 
-								(number.toFixed(fixedLength)));
-			} else {
-				val = number === 0 ? 
-								number.toFixed(fixedLength) : 
-								number.toFixed(fixedLength);	
-			}
-
+			val = number === 0 ? 
+							number.toFixed(fixedLength) : 
+							number.toFixed(fixedLength);	
+		
 			return val.toString();
 		} else if(displayType.base === 2){
 			return number;
 		}
 	},
 	toFractionalFromFloat: function(number, displayType) {
-		if(displayType.base === 2){
-			// is a fractional number
-			if(number.indexOf(fracToken) > -1){
+		var numberParts;
 
+		if(displayType.base === 2){
+			if(isFloat(number)){
+				numberParts = getParts(number, ['.']);
+				
+				return convertToFractional(numberParts, displayType);
 			} else {
 				return number;
 			}
