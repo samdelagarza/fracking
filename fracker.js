@@ -19,13 +19,13 @@ isDecimal = function(number){
 },
 getFixedLength = function(number, displayType) {
 	var fixedLength = (displayType.primaryDivisor.toString()).length-1,
-		remainderLen = (getRemainder(number).toString()).length;
+	remainderLen = (getRemainder(number).toString()).length;
 
 	fixedLength = remainderLen > fixedLength ? 
-					remainderLen : 
-					fixedLength;
+	remainderLen : 
+	fixedLength;
 
-					return fixedLength;
+	return fixedLength;
 },
 f = {
 	decimaltoString: function(number, displayType) {
@@ -35,14 +35,24 @@ f = {
 			fixedLength = getFixedLength(number, displayType);
 		}
 
-		val = isDecimal(number) ? 
-			 	(number.toFixed(fixedLength)) :
-				number;
-		
-		return val.toString();
-		}
-	};
+		// console.log('number: ', number);
+		// console.log(isDecimal(number));
+		// console.log((number.toFixed(fixedLength)));
+		// console.log(fixedLength);
 
-	exports.fracker = {
-		decimaltoString: f.decimaltoString
-	};	
+		if(isDecimal(number)){
+			val = (fixedLength===0? number :(number.toFixed(fixedLength)));
+		} else {
+				// console.log('here: ', number);
+				// console.log('here: ', number.toFixed(fixedLength));
+			val = number === 0 ? number.toFixed(fixedLength) : number.toFixed(fixedLength);
+		}
+
+		// console.log('val: ', val);
+		return val.toString();
+	}
+};
+
+exports.fracker = {
+	decimaltoString: f.decimaltoString
+};	

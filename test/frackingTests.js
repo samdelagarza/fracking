@@ -28,8 +28,8 @@ describe('Convert to decimal string from string', function(){
 
 		assert.equal(fracker.decimaltoString(21.7, priceConversionObj),'21.7');
 		assert.equal(fracker.decimaltoString(-21.7, priceConversionObj),'-21.7');
-		assert.equal(fracker.decimaltoString(21.0, priceConversionObj),'21');
-		assert.equal(fracker.decimaltoString(-21.0, priceConversionObj),'-21');
+		assert.equal(fracker.decimaltoString(21.0, priceConversionObj),'21.0');
+		assert.equal(fracker.decimaltoString(-21.0, priceConversionObj),'-21.0');
 		assert.equal(fracker.decimaltoString(21.5, priceConversionObj),'21.5');
 		assert.equal(fracker.decimaltoString(-21.5, priceConversionObj),'-21.5');
 		assert.equal(fracker.decimaltoString(21.232, priceConversionObj),'21.232');
@@ -74,7 +74,7 @@ describe('Convert to decimal string from string', function(){
 		assert.equal(fracker.decimaltoString(31.5, priceConversionObj), '31.500');
 		assert.equal(fracker.decimaltoString(31.25, priceConversionObj), '31.250');
 		assert.equal(fracker.decimaltoString(-31.500, priceConversionObj), '-31.500');
-		assert.equal(fracker.decimaltoString(-31, priceConversionObj), '-31');
+		assert.equal(fracker.decimaltoString(-31, priceConversionObj), '-31.000');
 		assert.equal(fracker.decimaltoString(-31.232, priceConversionObj), '-31.232');
 		assert.equal(fracker.decimaltoString(-31.2333, priceConversionObj), '-31.2333');
 		assert.equal(fracker.decimaltoString(-31.12245, priceConversionObj), '-31.12245');
@@ -116,7 +116,7 @@ describe('Convert to decimal string from string', function(){
 			secondaryDivisor: 1
 		};
 
-		assert.equal(fracker.decimaltoString(0, priceConversionObj), '0.0000');
+		assert.equal(fracker.decimaltoString(0, priceConversionObj), '0.00000');
 	});
 
 	it('6 decimals');
