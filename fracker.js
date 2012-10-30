@@ -8,13 +8,15 @@ getRemainder = function(number){
 	
 	return (number.toString()).split('.')[1];
 },
-isDecimal = function(number){
+isFloat = function(number){
 	var d = getRemainder(number);
 	return d !== 0;
 },
 getFixedLength = function(number, displayType) {
 	var fixedLength = (displayType.primaryDivisor.toString()).length-1,
-	remainderLen = (getRemainder(number).toString()).length;
+	remainderLen = getRemainder(number) === 0 ? 
+					0 : 
+					(getRemainder(number).toString()).length;
 
 	fixedLength = remainderLen > fixedLength ? 
 	remainderLen : 
@@ -23,7 +25,7 @@ getFixedLength = function(number, displayType) {
 	return fixedLength;
 },
 f = {
-	decimaltoString: function(number, displayType) {
+	toStringFromFloat: function(number, displayType) {
 		var fixedLength = 0, val, 
 			displayType = displayType || {
 				base: 10,
@@ -33,32 +35,40 @@ f = {
 
 		if(displayType.base === 10){
 			fixedLength = getFixedLength(number, displayType);
-			
+
 			// console.log('number: ', number);
-			// console.log(isDecimal(number));
+			// console.log(isFloat(number));
 			// console.log((number.toFixed(fixedLength)));
 			// console.log(fixedLength);
 
-			if(isDecimal(number)){
-				val = (fixedLength===0? number :(number.toFixed(fixedLength)));
+			if(isFloat(number)){
+				val = (fixedLength===0 ? 
+								number : 
+								(number.toFixed(fixedLength)));
 			} else {
-				if(fixedLength === 1){
-					val = number;
-				} else {
-					val = number === 0 ? number.toFixed(fixedLength) : number.toFixed(fixedLength);	
-				}
-				// console.log('here: ', number);
-				// console.log('here: ', number.toFixed(fixedLength));
+				val = number === 0 ? 
+								number.toFixed(fixedLength) : 
+								number.toFixed(fixedLength);	
 			}
 
-			// console.log('val: ', val);
 			return val.toString();
 		} else if(displayType.base === 2){
-			return 01;
+			return number;
+		}
+	},
+	toFractionalFromFloat: function(number, displayType) {
+		if(displayType.base === 2){
+			// is a fractional number
+			if(number.indexOf(fracToken) > -1){
+
+			} else {
+				return number;
+			}
 		}
 	}
 };
 
 exports.fracker = {
-	decimaltoString: f.decimaltoString
+	toStringFromFloat: f.toStringFromFloat,
+	toFractionalFromFloat: f.toFractionalFromFloat,
 };	
