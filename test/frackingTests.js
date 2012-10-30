@@ -117,9 +117,58 @@ describe('Convert to decimal string from string', function(){
 		};
 
 		assert.equal(fracker.decimaltoString(0, priceConversionObj), '0.00000');
+		assert.equal(fracker.decimaltoString(51.07, priceConversionObj), '51.07000');
+		assert.equal(fracker.decimaltoString(51.007, priceConversionObj), '51.00700');
+		assert.equal(fracker.decimaltoString(51.0007, priceConversionObj), '51.00070');
+		assert.equal(fracker.decimaltoString(51.00007, priceConversionObj), '51.00007');
+		assert.equal(fracker.decimaltoString(51.7, priceConversionObj), '51.70000');
+		assert.equal(fracker.decimaltoString(51.0, priceConversionObj), '51.00000');
+		assert.equal(fracker.decimaltoString(51.5, priceConversionObj), '51.50000');
+		assert.equal(fracker.decimaltoString(51.25, priceConversionObj), '51.25000');
+		assert.equal(fracker.decimaltoString(51.123, priceConversionObj), '51.12300');
+		assert.equal(fracker.decimaltoString(51.1234, priceConversionObj), '51.12340');
+		assert.equal(fracker.decimaltoString(51.12345, priceConversionObj), '51.12345');
+		assert.equal(fracker.decimaltoString(51.123456, priceConversionObj), '51.123456');
+		assert.equal(fracker.decimaltoString(51.1234567, priceConversionObj), '51.1234567');
+		assert.equal(fracker.decimaltoString(51.12345678, priceConversionObj), '51.12345678');
+		assert.equal(fracker.decimaltoString(-51.5, priceConversionObj), '-51.50000');
+		assert.equal(fracker.decimaltoString(-51, priceConversionObj), '-51.00000');
+		assert.equal(fracker.decimaltoString(-51.232, priceConversionObj), '-51.23200');
+		assert.equal(fracker.decimaltoString(-51.2333, priceConversionObj), '-51.23330');
+		assert.equal(fracker.decimaltoString(-51.12245, priceConversionObj), '-51.12245');
+		assert.equal(fracker.decimaltoString(-0.5, priceConversionObj), '-0.50000');
 	});
 
-	it('6 decimals');
+	it('6 decimals', function() {
+		var priceConversionObj = {
+			base: 10,
+			primaryDivisor: 1000000,
+			secondaryDivisor: 1
+		};
+
+		assert.equal(fracker.decimaltoString(0, priceConversionObj), '0.000000');
+		assert.equal(fracker.decimaltoString(61.07, priceConversionObj), '61.070000');
+		assert.equal(fracker.decimaltoString(61.007, priceConversionObj), '61.007000');
+		assert.equal(fracker.decimaltoString(61.0007, priceConversionObj), '61.000700');
+		assert.equal(fracker.decimaltoString(61.00007, priceConversionObj), '61.000070');
+		assert.equal(fracker.decimaltoString(61.000007, priceConversionObj), '61.000007');
+		assert.equal(fracker.decimaltoString(61.7, priceConversionObj), '61.700000');
+		assert.equal(fracker.decimaltoString(61.0, priceConversionObj), '61.000000');
+		assert.equal(fracker.decimaltoString(61.5, priceConversionObj), '61.500000');
+		assert.equal(fracker.decimaltoString(61.25, priceConversionObj), '61.250000');
+		assert.equal(fracker.decimaltoString(61.123, priceConversionObj), '61.123000');
+		assert.equal(fracker.decimaltoString(61.1234, priceConversionObj), '61.123400');
+		assert.equal(fracker.decimaltoString(61.12345, priceConversionObj), '61.123450');
+		assert.equal(fracker.decimaltoString(61.123456, priceConversionObj), '61.123456');
+		assert.equal(fracker.decimaltoString(61.1234567, priceConversionObj), '61.1234567');
+		assert.equal(fracker.decimaltoString(61.12345678, priceConversionObj), '61.12345678');
+		assert.equal(fracker.decimaltoString(-61.5, priceConversionObj), '-61.500000');
+		assert.equal(fracker.decimaltoString(-61, priceConversionObj), '-61.000000');
+		assert.equal(fracker.decimaltoString(-61.232, priceConversionObj), '-61.232000');
+		assert.equal(fracker.decimaltoString(-61.2333, priceConversionObj), '-61.233300');
+		assert.equal(fracker.decimaltoString(-61.12245, priceConversionObj), '-61.122450');
+		assert.equal(fracker.decimaltoString(-0.5, priceConversionObj), '-0.500000');
+	});
 });
 
 describe('Convert to a single fractional string from number', function(){
@@ -129,6 +178,24 @@ describe('Convert to a single fractional string from number', function(){
 			primaryDivisor: 2,
 			secondaryDivisor: 1
 		}
+
+		assert.equal(fracker.decimaltoString(0, priceConversionObj), '0');
+		// assert.equal(fracker.decimaltoString(11.0, priceConversionObj), '11');
+		// assert.equal(fracker.decimaltoString(99.5, priceConversionObj), '99 1/2');
+		
 	});
 	it('test2')
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
