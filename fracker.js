@@ -9,7 +9,10 @@ getRemainder = function(number){
 	return (number.toString()).split('.')[1];
 },
 isFloat = function(number){
-	return  (number % 1) > 0;
+	return  (Math.abs(number) % 1) > 0;
+},
+isNegative = function(number) {
+	return number.toString().indexOf('-')>-1;
 },
 getFixedLength = function(number, displayType) {
 	var fixedLength = (displayType.primaryDivisor.toString()).length-1,
@@ -23,9 +26,8 @@ getFixedLength = function(number, displayType) {
 
 	return fixedLength;
 },
-getParts = function (number, delimeters) {
-	var delimiter = delimeters[0],
-		n = (number).toString().split(delimiter),
+getParts = function (number, delimiter) {
+	var n = (number).toString().split(delimiter),
 		wholeNumber, remainder, fractional;
 
 		wholeNumber = n[0];
@@ -34,10 +36,19 @@ getParts = function (number, delimeters) {
 	return [wholeNumber, remainder];
 },
 convertToFractional = function(parts, displayType) {
-	var power = Math.log(parts[1]);
-	console.log('power: ', power);
+	var digits = parts[1].toString().length,
+		decimalPlaces = Math.pow(10, digits),
+		factor = decimalPlaces / displayType.primaryDivisor,
+		wholeNumber = parts[0] == 0 ? '' : parts[0] + ' ',
+		numerator = parts[1] / factor,
+		denominator = decimalPlaces / factor;
 
-	return parts.join(' ');
+		// console.log('number: ', parts[0]);
+		// console.log('wholeNumber: ', parts[0]);
+		// console.log(numerator);
+		// console.log(denominator);
+
+	return (isNegative(parts[0]) ? '-':'') + wholeNumber + numerator + '/' + denominator;
 },
 f = {
 	toStringFromFloat: function(number, displayType) {
@@ -70,7 +81,7 @@ f = {
 
 		if(displayType.base === 2){
 			if(isFloat(number)){
-				numberParts = getParts(number, ['.']);
+				numberParts = getParts(number, '.');
 				
 				return convertToFractional(numberParts, displayType);
 			} else {

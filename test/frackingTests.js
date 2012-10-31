@@ -171,7 +171,7 @@ describe('Convert to decimal string from string', function(){
 	});
 });
 
-describe('Convert to a single fractional string from number', function(){
+describe('Convert to a single-fractional from a number', function(){
 	it('halves to string', function() {
 		var priceConversionObj = {
 			base: 2,
@@ -182,10 +182,109 @@ describe('Convert to a single fractional string from number', function(){
 		assert.equal(fracker.toFractionalFromFloat(0, priceConversionObj), '0');
 		assert.equal(fracker.toFractionalFromFloat(11.0, priceConversionObj), '11');
 		assert.equal(fracker.toFractionalFromFloat(99.5, priceConversionObj), '99 1/2');
+		assert.equal(fracker.toFractionalFromFloat(.5, priceConversionObj), '1/2');
+		assert.equal(fracker.toFractionalFromFloat(-0.5, priceConversionObj), '-1/2');
 		
 	});
-	it('test2')
+
+	it('fourths to string', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 4,
+			secondaryDivisor: 1
+		};
+
+		assert.equal(fracker.toFractionalFromFloat(0, priceConversionObj), '0');		
+		assert.equal(fracker.toFractionalFromFloat(74, priceConversionObj), '74');		
+		assert.equal(fracker.toFractionalFromFloat(33.25, priceConversionObj), '33 1/4');
+		assert.equal(fracker.toFractionalFromFloat(43.5, priceConversionObj), '43 2/4');
+		assert.equal(fracker.toFractionalFromFloat(193.75, priceConversionObj), '193 3/4');
+		assert.equal(fracker.toFractionalFromFloat(.75, priceConversionObj), '3/4');
+		assert.equal(fracker.toFractionalFromFloat(-.75, priceConversionObj), '-3/4');
+	});
+
+	it('eights to string', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 8,
+			secondaryDivisor: 1
+		};
+
+		assert.equal(fracker.toFractionalFromFloat(0, priceConversionObj), '0');
+		assert.equal(fracker.toFractionalFromFloat(101.0, priceConversionObj), '101');
+		assert.equal(fracker.toFractionalFromFloat(995.125, priceConversionObj), '995 1/8');
+		assert.equal(fracker.toFractionalFromFloat(334.25, priceConversionObj), '334 2/8');
+		assert.equal(fracker.toFractionalFromFloat(567.375, priceConversionObj), '567 3/8');
+		assert.equal(fracker.toFractionalFromFloat(474.5, priceConversionObj), '474 4/8');
+		assert.equal(fracker.toFractionalFromFloat(272.625, priceConversionObj), '272 5/8');
+		assert.equal(fracker.toFractionalFromFloat(101.75, priceConversionObj), '101 6/8');
+		assert.equal(fracker.toFractionalFromFloat(263.875, priceConversionObj), '263 7/8');
+		assert.equal(fracker.toFractionalFromFloat(0.875, priceConversionObj), '7/8');
+		assert.equal(fracker.toFractionalFromFloat(-0.875, priceConversionObj), '-7/8');
+	});
+
+	it('sixteenths to string');
+	it('thirty-seconds to string');
+	it('sixty-fourths to string');
+	it('one-twenty-eighths to string');
+	it('two-fifty-sixths to string');
 });
+
+describe('Convert a number to a multi-fractional string', function() {
+	it('thirty-seconds-halves to string', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 32,
+			secondaryDivisor: 2
+		};
+
+		assert.equal(fracker.toFractionalFromFloat(0, priceConversionObj), "0'00.0");
+		assert.equal(fracker.toFractionalFromFloat(101.0, priceConversionObj), "101'00.0");
+		assert.equal(fracker.toFractionalFromFloat(995.015625, priceConversionObj), "995'00.5");
+		assert.equal(fracker.toFractionalFromFloat(995.03125, priceConversionObj), "995'01.0");
+		assert.equal(fracker.toFractionalFromFloat(995.046875, priceConversionObj), "995'01.5");
+	});
+
+	it('thirty-seconds-quarters to string');
+});
+
+describe('Convert a decimal to number', function() {
+	it('string to a zero digit decimal');
+	it('string to a one digit decimal');
+	it('string to a six digit decimal');
+});
+
+describe('Convert single-fractional string to number', function() {
+	it('string to a havles');
+	it('string to a fourths');
+	it('string to a eighths');
+	it('string to a thirty-seconds');
+});
+
+describe('Convert multi-fractional string to number', function() {
+	it('throw an error when using an incomplete multi-fractional sting');
+	it('string to thirty-seconds-halves');
+	it('string to thirty-seconds-and-quarters');
+	it('string to thirty-seconds-and-eighths');
+	it('string to thirty-seconds-and-tenths');
+});
+
+// var x = '1 1/2';
+
+// var y = x.split(' ');
+// if(y.length > 1){
+//     var z = y[1].split('/');
+//     console.log(+y[0] + (z[0] / z[1]));
+// }
+// else{
+//     var z = y[0].split('/');
+//     if(z.length > 1){
+//         console.log(z[0] / z[1]);
+//     }
+//     else{
+//         console.log(z[0]);
+//     }
+// }​
 
 
 
