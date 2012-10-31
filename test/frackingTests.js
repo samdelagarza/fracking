@@ -243,6 +243,12 @@ describe('Convert a number to a multi-fractional string', function() {
 		assert.equal(fracker.toFractionalFromFloat(995.015625, priceConversionObj), "995'00.5");
 		assert.equal(fracker.toFractionalFromFloat(995.03125, priceConversionObj), "995'01.0");
 		assert.equal(fracker.toFractionalFromFloat(995.046875, priceConversionObj), "995'01.5");
+		assert.equal(fracker.toFractionalFromFloat(995.0625, priceConversionObj), "995'02.0");
+		assert.equal(fracker.toFractionalFromFloat(995.078125, priceConversionObj), "995'02.5");
+		assert.equal(fracker.toFractionalFromFloat(995.09375, priceConversionObj), "995'03.0");
+		// TODO: finish off the tests here.
+		assert.equal(fracker.toFractionalFromFloat(0.984375, priceConversionObj), "0'31.5");
+		assert.equal(fracker.toFractionalFromFloat(-0.984375, priceConversionObj), "-0'31.5");
 	});
 
 	it('thirty-seconds-quarters to string');
@@ -255,15 +261,33 @@ describe('Convert a decimal to number', function() {
 });
 
 describe('Convert single-fractional string to number', function() {
-	it('string to a havles');
+	it('string to a havles', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 2,
+			secondaryDivisor: 1
+		};
+
+		assert.equal(fracker.toFloatFromFractional("77 1/2", priceConversionObj), 77.5);
+		assert.equal(fracker.toFloatFromFractional("77 1/4", priceConversionObj), 77.5);
+	});
+
 	it('string to a fourths');
 	it('string to a eighths');
 	it('string to a thirty-seconds');
 });
 
-describe('Convert multi-fractional string to number', function() {
+xdescribe('Convert multi-fractional string to number', function() {
 	it('throw an error when using an incomplete multi-fractional sting');
-	it('string to thirty-seconds-halves');
+	it('string to thirty-seconds-halves', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 32,
+			secondaryDivisor: 1
+		};
+
+		assert.equal(fracker.toFloatFromFractional("-0'31.5", priceConversionObj), -0.984375);
+	});
 	it('string to thirty-seconds-and-quarters');
 	it('string to thirty-seconds-and-eighths');
 	it('string to thirty-seconds-and-tenths');

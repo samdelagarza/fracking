@@ -35,6 +35,9 @@ getParts = function (number, delimiter) {
 
 	return [wholeNumber, remainder];
 },
+getMinMove = function(displayType){
+	return 1/(displayType.primaryDivisor * displayType.secondaryDivisor);
+},
 convertToFractional = function(parts, displayType) {
 	var digits = parts[1].toString().length,
 		decimalPlaces = Math.pow(10, digits),
@@ -44,7 +47,7 @@ convertToFractional = function(parts, displayType) {
 		denominator = decimalPlaces / factor,
 		isMultiFractional = displayType.secondaryDivisor != 1,
 		primaryDivisorDecimal = 1/displayType.primaryDivisor,
-		result, decimal, quotient;
+		result, decimal, quotient, remainder, wholeQuotient;
 
 	if(parts[0] === 0 && parts[1] === 0){
 		return "0'00.0";
@@ -52,19 +55,39 @@ convertToFractional = function(parts, displayType) {
 
 	if(isMultiFractional){
 		result = wholeNumber.toString().replace(/\s/g,'');
+		result = result.length === 0 ? 0 : result;
 
 		decimal = parseFloat('.'+parts[1]);
 		quotient  = decimal/primaryDivisorDecimal;
-		
+
 		if(quotient == 1){
-			console.log('here')
 			result = result + "'0"+quotient+".0";
 		} else {
-			result = result + "'00."+quotient.toString().split('.')[1];
+			// console.log('decimal: ', decimal);
+			// console.log('quotient: ', quotient);
+			// console.log('primaryDivisorDecimal: ', primaryDivisorDecimal);
+			// console.log('here')
+			
+			remainder = quotient.toString().split('.')[1] || 0;
+
+			// console.log('remainder: ', remainder);
+
+			wholeQuotient = quotient.toString().split('.')[0];
+			// pad number
+			if(quotient < 10){
+				wholeQuotient = '0' + wholeQuotient;
+			}
+			// console.log('wholeQuotient: ', wholeQuotient)
+			// console.log('quotient: ', quotient)
+			// console.log('remainder: ', remainder);
+
+			result = (isNegative(parts[0]) ? '-':'') + result + "'"+wholeQuotient + "." + remainder;
+			// console.log(result)
 		}
 
 	} else {
-		result = (isNegative(parts[0]) ? '-':'') + wholeNumber + numerator + '/' + denominator;
+		result = (isNegative(parts[0]) ? '-':'') + wholeNumber + 
+					numerator + '/' + denominator;
 	}
 
 		// console.log('number: ', parts[0]);
@@ -73,6 +96,24 @@ convertToFractional = function(parts, displayType) {
 		// console.log(denominator);
 
 	return result;
+},
+convertToFloat = function(numberString, displayType) {
+	var spaceToken = ' ', fractionToken = '/',
+	wholeNumber, fractionString, remainder, result;
+
+	if(displayType.primaryDivisor === 2 && numberString){
+		wholeNumber = parseInt(numberString.split(spaceToken)[0],10);
+		fractionString = numberString.split(spaceToken)[1];
+		remainder = fractionString.split(fractionToken)[0] / 
+					fractionString.split(fractionToken)[1];
+
+		result = wholeNumber + remainder;
+	}		
+	
+	return roundToNearestMinMove(result);
+},
+roundToNearestMinMove = function(number) {
+	return number;
 },
 f = {
 	toStringFromFloat: function(number, displayType) {
@@ -113,10 +154,39 @@ f = {
 				return isMultiFractional ? number + "'00.0" : number;
 			}
 		}
+	},
+	toFloatFromFractional: function(numberString, displayType) {
+		return convertToFloat(numberString, displayType);
 	}
 };
 
 exports.fracker = {
 	toStringFromFloat: f.toStringFromFloat,
 	toFractionalFromFloat: f.toFractionalFromFloat,
+	toFloatFromFractional: f.toFloatFromFractional
 };	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
