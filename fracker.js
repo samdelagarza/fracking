@@ -77,10 +77,21 @@ f = {
 		}
 	},
 	toFractionalFromFloat: function(number, displayType) {
-		var numberParts;
+		var numberParts,
+			isMultiFractional = displayType.secondaryDivisor != 1;
 
 		if(displayType.base === 2){
-			if(isFloat(number)){
+			if(isMultiFractional){
+				if(number === 0){
+					return "0'00.0";
+				} else {
+					if(isFloat(number)){
+						console.log('isFloat');
+					} else {
+						return number + "'00.0";
+					}
+				}
+			} else if(isFloat(number)){
 				numberParts = getParts(number, '.');
 				
 				return convertToFractional(numberParts, displayType);
