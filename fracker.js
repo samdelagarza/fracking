@@ -41,14 +41,38 @@ convertToFractional = function(parts, displayType) {
 		factor = decimalPlaces / displayType.primaryDivisor,
 		wholeNumber = parts[0] == 0 ? '' : parts[0] + ' ',
 		numerator = parts[1] / factor,
-		denominator = decimalPlaces / factor;
+		denominator = decimalPlaces / factor,
+		isMultiFractional = displayType.secondaryDivisor != 1,
+		primaryDivisorDecimal = 1/displayType.primaryDivisor,
+		result, decimal, quotient;
+
+	if(parts[0] === 0 && parts[1] === 0){
+		return "0'00.0";
+	} 
+
+	if(isMultiFractional){
+		result = wholeNumber.toString().replace(/\s/g,'');
+
+		decimal = parseFloat('.'+parts[1]);
+		quotient  = decimal/primaryDivisorDecimal;
+		
+		if(quotient == 1){
+			console.log('here')
+			result = result + "'0"+quotient+".0";
+		} else {
+			result = result + "'00."+quotient.toString().split('.')[1];
+		}
+
+	} else {
+		result = (isNegative(parts[0]) ? '-':'') + wholeNumber + numerator + '/' + denominator;
+	}
 
 		// console.log('number: ', parts[0]);
 		// console.log('wholeNumber: ', parts[0]);
 		// console.log(numerator);
 		// console.log(denominator);
 
-	return (isNegative(parts[0]) ? '-':'') + wholeNumber + numerator + '/' + denominator;
+	return result;
 },
 f = {
 	toStringFromFloat: function(number, displayType) {
@@ -81,22 +105,12 @@ f = {
 			isMultiFractional = displayType.secondaryDivisor != 1;
 
 		if(displayType.base === 2){
-			if(isMultiFractional){
-				if(number === 0){
-					return "0'00.0";
-				} else {
-					if(isFloat(number)){
-						console.log('isFloat');
-					} else {
-						return number + "'00.0";
-					}
-				}
-			} else if(isFloat(number)){
+			if(isFloat(number)){
 				numberParts = getParts(number, '.');
 				
 				return convertToFractional(numberParts, displayType);
 			} else {
-				return number;
+				return isMultiFractional ? number + "'00.0" : number;
 			}
 		}
 	}

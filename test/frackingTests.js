@@ -241,8 +241,8 @@ describe('Convert a number to a multi-fractional string', function() {
 		assert.equal(fracker.toFractionalFromFloat(0, priceConversionObj), "0'00.0");
 		assert.equal(fracker.toFractionalFromFloat(101.0, priceConversionObj), "101'00.0");
 		assert.equal(fracker.toFractionalFromFloat(995.015625, priceConversionObj), "995'00.5");
-		// assert.equal(fracker.toFractionalFromFloat(995.03125, priceConversionObj), "995'01.0");
-		// assert.equal(fracker.toFractionalFromFloat(995.046875, priceConversionObj), "995'01.5");
+		assert.equal(fracker.toFractionalFromFloat(995.03125, priceConversionObj), "995'01.0");
+		assert.equal(fracker.toFractionalFromFloat(995.046875, priceConversionObj), "995'01.5");
 	});
 
 	it('thirty-seconds-quarters to string');
