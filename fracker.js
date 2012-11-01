@@ -27,11 +27,11 @@ getFixedLength = function(number, displayType) {
 	return fixedLength;
 },
 getParts = function (number, delimiter) {
-	var n = (number).toString().split(delimiter),
-		wholeNumber, remainder, fractional;
+	var n, wholeNumber, remainder, fractional;
 
-		wholeNumber = n[0];
-		remainder = n[1];
+	n = (number).toString().split(delimiter);
+	wholeNumber = n[0];
+	remainder = n[1];
 
 	return [wholeNumber, remainder];
 },
@@ -98,22 +98,28 @@ convertToFractional = function(parts, displayType) {
 	return result;
 },
 convertToFloat = function(numberString, displayType) {
-	var spaceToken = ' ', fractionToken = '/',
-	wholeNumber, fractionString, remainder, result;
+	var spaceToken = ' ', fractionToken = '/', remainder = 0,
+	wholeNumber, fractionString, result;
 
 	if(displayType.primaryDivisor === 2 && numberString){
 		wholeNumber = parseInt(numberString.split(spaceToken)[0],10);
 		fractionString = numberString.split(spaceToken)[1];
-		remainder = fractionString.split(fractionToken)[0] / 
-					fractionString.split(fractionToken)[1];
+		
+		if(numberString.indexOf('/') > -1){
+			remainder = fractionString.split(fractionToken)[0] / 
+						fractionString.split(fractionToken)[1];
+		}
 
 		result = wholeNumber + remainder;
 	}		
 	
-	return roundToNearestMinMove(result);
+	return roundToNearestMinMove(result, displayType);
 },
-roundToNearestMinMove = function(number) {
-	return number;
+roundToNearestMinMove = function(number, displayType) {
+	var minMove = getMinMove(displayType),
+		remainder = number % minMove;
+
+	return number - remainder + ((remainder < (minMove / 2)) ? 0.0 : minMove);
 },
 f = {
 	toStringFromFloat: function(number, displayType) {

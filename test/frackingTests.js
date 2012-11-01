@@ -270,9 +270,14 @@ describe('Convert single-fractional string to number', function() {
 
 		assert.equal(fracker.toFloatFromFractional("77 1/2", priceConversionObj), 77.5);
 		assert.equal(fracker.toFloatFromFractional("77 1/4", priceConversionObj), 77.5);
+		assert.equal(fracker.toFloatFromFractional("77 3/4", priceConversionObj), 78);
+		assert.equal(fracker.toFloatFromFractional("77", priceConversionObj), 77);
 	});
 
-	it('string to a fourths');
+	it('string to a fourths', function() {
+		
+	});
+
 	it('string to a eighths');
 	it('string to a thirty-seconds');
 });
