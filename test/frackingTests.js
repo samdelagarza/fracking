@@ -275,10 +275,33 @@ describe('Convert single-fractional string to number', function() {
 	});
 
 	it('string to a fourths', function() {
-		
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 4,
+			secondaryDivisor: 1
+		};
+
+		assert.equal(fracker.toFloatFromFractional("77 1/4", priceConversionObj), 77.25);
+		assert.equal(fracker.toFloatFromFractional("77 1/16", priceConversionObj), 77);
+		assert.equal(fracker.toFloatFromFractional("77 1/8", priceConversionObj), 77.25);
+		assert.equal(fracker.toFloatFromFractional("77 3/8", priceConversionObj), 77.5);
+		assert.equal(fracker.toFloatFromFractional("77", priceConversionObj), 77);
 	});
 
-	it('string to a eighths');
+	it('string to a eighths', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 8,
+			secondaryDivisor: 1
+		};
+
+		assert.equal(fracker.toFloatFromFractional("77 1/8", priceConversionObj), 77.125);
+		assert.equal(fracker.toFloatFromFractional("77 7/8", priceConversionObj), 77.875);
+		assert.equal(fracker.toFloatFromFractional("77 1/16", priceConversionObj), 77.125);
+		assert.equal(fracker.toFloatFromFractional("77 3/16", priceConversionObj), 77.25);
+		assert.equal(fracker.toFloatFromFractional("77", priceConversionObj), 77);
+	});
+
 	it('string to a thirty-seconds');
 });
 

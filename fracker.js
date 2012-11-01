@@ -101,7 +101,8 @@ convertToFloat = function(numberString, displayType) {
 	var spaceToken = ' ', fractionToken = '/', remainder = 0,
 	wholeNumber, fractionString, result;
 
-	if(displayType.primaryDivisor === 2 && numberString){
+	// if((displayType.primaryDivisor === 2 || 
+		// displayType.primaryDivisor === 4) && numberString){
 		wholeNumber = parseInt(numberString.split(spaceToken)[0],10);
 		fractionString = numberString.split(spaceToken)[1];
 		
@@ -111,7 +112,7 @@ convertToFloat = function(numberString, displayType) {
 		}
 
 		result = wholeNumber + remainder;
-	}		
+	// }		
 	
 	return roundToNearestMinMove(result, displayType);
 },
