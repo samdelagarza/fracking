@@ -1101,7 +1101,7 @@
 - (void)testStringToHalves
 {
     PriceDisplayType *displayType = [[PriceDisplayType alloc] init];
-    displayType.base = 2;
+    tydisplayType.base = 2;
     displayType.primaryDivisor = 2;
    
     NSString *errorStr = @"Mismatch converting to fractional halves.";

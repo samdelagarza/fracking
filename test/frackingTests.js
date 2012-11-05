@@ -302,43 +302,63 @@ describe('Convert single-fractional string to number', function() {
 		assert.equal(fracker.toFloatFromFractional("77", priceConversionObj), 77);
 	});
 
-	it('string to a thirty-seconds');
-});
-
-xdescribe('Convert multi-fractional string to number', function() {
-	it('throw an error when using an incomplete multi-fractional sting');
-	it('string to thirty-seconds-halves', function() {
+	it('string to a thirty-seconds', function() {
 		var priceConversionObj = {
 			base: 2,
 			primaryDivisor: 32,
 			secondaryDivisor: 1
 		};
 
-		assert.equal(fracker.toFloatFromFractional("-0'31.5", priceConversionObj), -0.984375);
+		assert.equal(fracker.toFloatFromFractional("77 1/32", priceConversionObj), 77.03125);
+		assert.equal(fracker.toFloatFromFractional("77 1/64", priceConversionObj), 77.03125);
+		assert.equal(fracker.toFloatFromFractional("77 31/32", priceConversionObj), 77.96875);
+		assert.equal(fracker.toFloatFromFractional("77 3/64", priceConversionObj), 77.0625);
+		assert.equal(fracker.toFloatFromFractional("77", priceConversionObj), 77);
+
 	});
-	it('string to thirty-seconds-and-quarters');
-	it('string to thirty-seconds-and-eighths');
-	it('string to thirty-seconds-and-tenths');
 });
 
-// var x = '1 1/2';
+describe('Convert multi-fractional string to number', function() {
+	it('can handle incomplete multi-fractionals');
+	it('from thirty-seconds & halves to a float', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 32,
+			secondaryDivisor: 2
+		};
 
-// var y = x.split(' ');
-// if(y.length > 1){
-//     var z = y[1].split('/');
-//     console.log(+y[0] + (z[0] / z[1]));
-// }
-// else{
-//     var z = y[0].split('/');
-//     if(z.length > 1){
-//         console.log(z[0] / z[1]);
-//     }
-//     else{
-//         console.log(z[0]);
-//     }
-// }​
+		assert.equal(fracker.toFloatFromFractional("77'01.5", priceConversionObj), 77.046875);
+		assert.equal(fracker.toFloatFromFractional("77'1.5", priceConversionObj), 77.046875);
+		assert.equal(fracker.toFloatFromFractional("77'1.0", priceConversionObj), 77.031250);
+	});
+	it('string to thirty-seconds-and-quarters', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 32,
+			secondaryDivisor: 4
+		};		
 
+		assert.equal(fracker.toFloatFromFractional("77'16.2", priceConversionObj), 77.5078125);
+		assert.equal(fracker.toFloatFromFractional("77'16.5", priceConversionObj), 77.515625);
+		assert.equal(fracker.toFloatFromFractional("77'16.7", priceConversionObj), 77.5234375);
+		assert.equal(fracker.toFloatFromFractional("77'16.0", priceConversionObj), 77.5);
+		assert.equal(fracker.toFloatFromFractional("77'16.8", priceConversionObj), 77.53125);
+	});
+	it('string to thirty-seconds-and-eighths', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 32,
+			secondaryDivisor: 8
+		};		
 
+		assert.equal(fracker.toFloatFromFractional("77'8.1", priceConversionObj), 77.25390625);
+		assert.equal(fracker.toFloatFromFractional("77'8.2", priceConversionObj), 77.2578125);
+		assert.equal(fracker.toFloatFromFractional("77'8.3", priceConversionObj), 77.26171875);
+		assert.equal(fracker.toFloatFromFractional("77'8.5", priceConversionObj), 77.265625);
+		assert.equal(fracker.toFloatFromFractional("77'8.6", priceConversionObj), 77.26953125);
+	});
+	it('string to thirty-seconds-and-tenths');
+});
 
 
 
