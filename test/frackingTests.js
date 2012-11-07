@@ -402,17 +402,19 @@ describe('Convert multi-fractional string to number', function() {
 		assert.equal(fracker.decrementFractional('77 1/4', priceConversionObj), '77');
 		assert.equal(fracker.decrementFractional('77', priceConversionObj), '76 3/4');
 	});
-	xit('should increment a multi-fractional correctly', function() {
+	it('should increment a multi-fractional correctly', function() {
 		var priceConversionObj = {
 			base: 2,
-			primaryDivisor: 8,
-			secondaryDivisor: 1
+			primaryDivisor: 4,
+			secondaryDivisor: 2
 		};
-		assert.equal(fracker.incrementFractional("77'1.0", priceConversionObj), 77.25);
-		assert.equal(fracker.incrementFractional("77'1.1", priceConversionObj), 77.25);
-		assert.equal(fracker.incrementFractional("77", priceConversionObj), 77.25);
+		assert.equal(fracker.incrementFractional("77", priceConversionObj), "77'00.5");
+		assert.equal(fracker.incrementFractional("77'00.5", priceConversionObj), "77'01.0");
+		assert.equal(fracker.incrementFractional("77'01.0", priceConversionObj), "77'01.5");
+		assert.equal(fracker.incrementFractional("77'01.5", priceConversionObj), "77'02.0");
+		assert.equal(fracker.incrementFractional("77'02.0", priceConversionObj), "77'02.5");
 	});
-	xit('should increment a multi-fractional correctly', function() {
+	xit('should decrement a multi-fractional correctly', function() {
 		var priceConversionObj = {
 			base: 2,
 			primaryDivisor: 8,
