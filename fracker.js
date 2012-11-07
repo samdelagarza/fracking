@@ -216,6 +216,12 @@ f = {
 			minMove = getMinMove(displayType);
 
 		return this.toFractionalFromFloat(n+minMove, displayType);
+	},
+	decrementFractional: function(numberString, displayType) {
+		var n = this.toFloatFromFractional(numberString, displayType),
+			minMove = getMinMove(displayType);
+
+		return this.toFractionalFromFloat(n-minMove, displayType);
 	}
 };
 
