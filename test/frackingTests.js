@@ -357,16 +357,34 @@ describe('Convert multi-fractional string to number', function() {
 		assert.equal(fracker.toFloatFromFractional("77'8.5", priceConversionObj), 77.265625);
 		assert.equal(fracker.toFloatFromFractional("77'8.6", priceConversionObj), 77.26953125);
 	});
-	it('string to thirty-seconds-and-tenths');
+	it('string to thirty-seconds and tenths', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 32,
+			secondaryDivisor: 10
+		};
+
+		assert.equal(fracker.toFloatFromFractional("77'8.1", priceConversionObj), 77.253125);
+		assert.equal(fracker.toFloatFromFractional("77'08.1", priceConversionObj), 77.253125);
+		assert.equal(fracker.toFloatFromFractional("77'8.2", priceConversionObj), 77.25625);
+		assert.equal(fracker.toFloatFromFractional("77'8.3", priceConversionObj), 77.259375);
+		assert.equal(fracker.toFloatFromFractional("77'8.4", priceConversionObj), 77.2625);
+		assert.equal(fracker.toFloatFromFractional("77'8.5", priceConversionObj), 77.265625);
+		assert.equal(fracker.toFloatFromFractional("77'8.6", priceConversionObj), 77.26875);
+		assert.equal(fracker.toFloatFromFractional("77'8.7", priceConversionObj), 77.271875);
+		assert.equal(fracker.toFloatFromFractional("77'8.8", priceConversionObj), 77.275);
+		assert.equal(fracker.toFloatFromFractional("77'8.9", priceConversionObj), 77.278125);
+		assert.equal(fracker.toFloatFromFractional("77'8.0", priceConversionObj), 77.25);
+	});
+
+	it('should calculate the min move', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 8,
+			secondaryDivisor: 1
+		};
+
+		
+	});
+
 });
-
-
-
-
-
-
-
-
-
-
-
