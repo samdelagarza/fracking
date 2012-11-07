@@ -210,13 +210,24 @@ f = {
 	},
 	toFloatFromFractional: function(numberString, displayType) {
 		return convertToFloat(numberString, displayType);
+	}, 
+	incrementFractional: function(numberString, displayType){
+		var n = this.toFloatFromFractional(numberString, displayType),
+			minMove = getMinMove(displayType);
+
+		return this.toFractionalFromFloat(n+minMove, displayType);
 	}
 };
 
 exports.fracker = {
+	// TODO: is this one really needed?
 	toStringFromFloat: f.toStringFromFloat,
 	toFractionalFromFloat: f.toFractionalFromFloat,
-	toFloatFromFractional: f.toFloatFromFractional
+	toFloatFromFractional: f.toFloatFromFractional,
+	incrementFractional: f.incrementFractional,
+	decrementFractional: f.decrementFractional,
+	incrementFloat: f.incrementFloat,
+	decrementFloat: f.decrementFloat
 };	
 
 

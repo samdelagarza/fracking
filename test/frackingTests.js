@@ -377,14 +377,46 @@ describe('Convert multi-fractional string to number', function() {
 		assert.equal(fracker.toFloatFromFractional("77'8.0", priceConversionObj), 77.25);
 	});
 
-	it('should calculate the min move', function() {
+	it('should increment fourths fractional correctly', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 4,
+			secondaryDivisor: 1
+		};
+
+		assert.equal(fracker.incrementFractional("77", priceConversionObj), '77 1/4');
+		assert.equal(fracker.incrementFractional("77 1/4", priceConversionObj), '77 2/4');
+		assert.equal(fracker.incrementFractional("77 2/4", priceConversionObj), '77 3/4');
+		assert.equal(fracker.incrementFractional("77 3/4", priceConversionObj), '78');
+		assert.equal(fracker.incrementFractional("78", priceConversionObj), '78 1/4');
+	});
+	xit('should decrement a fractional correctly', function() {
 		var priceConversionObj = {
 			base: 2,
 			primaryDivisor: 8,
 			secondaryDivisor: 1
 		};
-
-		
+		assert.equal(fracker.decrementFractional("77 1/4", priceConversionObj), 77.25);
+		assert.equal(fracker.decrementFractional("77 2/4", priceConversionObj), 77.25);
 	});
-
+	xit('should increment a multi-fractional correctly', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 8,
+			secondaryDivisor: 1
+		};
+		assert.equal(fracker.incrementFractional("77'1.0", priceConversionObj), 77.25);
+		assert.equal(fracker.incrementFractional("77'1.1", priceConversionObj), 77.25);
+		assert.equal(fracker.incrementFractional("77", priceConversionObj), 77.25);
+	});
+	xit('should increment a multi-fractional correctly', function() {
+		var priceConversionObj = {
+			base: 2,
+			primaryDivisor: 8,
+			secondaryDivisor: 1
+		};
+		assert.equal(fracker.incrementFractional("77'1.0", priceConversionObj), 77.25);
+		assert.equal(fracker.incrementFractional("77'1.1", priceConversionObj), 77.25);
+		assert.equal(fracker.incrementFractional("77", priceConversionObj), 77.25);
+	});
 });
