@@ -1,0 +1,11 @@
+{
+    "name":"fracking.js",
+    "version":"0.0.1",
+    "description":"A tiny library to facilitate fractional to decimal conversion for security trading.",
+    "author":"sam de la garza",
+    "dependencies":{
+        "grunt-simple-mocha":">= 0.2.0",
+	"mocha":"1.7.x"
+    },
+    "homepage":"https://github.com/samdelagarza/fracking"
+}
