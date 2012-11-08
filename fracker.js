@@ -1,3 +1,4 @@
+//  Copyright (c) 2012 TradeStation Technologies, Inc. All rights reserved.
 var 
 getRemainder = function(number){
 	var n = Math.abs(number).toString();
