@@ -1,3 +1,5 @@
+/*global describe, it, require */
+
 var assert = require('assert'),
 	fracker = require('../fracker').fracker;
 
@@ -182,7 +184,7 @@ describe('Convert to a single-fractional from a number', function(){
 		assert.equal(fracker.toFractionalFromFloat(0, priceConversionObj), '0');
 		assert.equal(fracker.toFractionalFromFloat(11.0, priceConversionObj), '11');
 		assert.equal(fracker.toFractionalFromFloat(99.5, priceConversionObj), '99 1/2');
-		assert.equal(fracker.toFractionalFromFloat(.5, priceConversionObj), '1/2');
+		assert.equal(fracker.toFractionalFromFloat(0.5, priceConversionObj), '1/2');
 		assert.equal(fracker.toFractionalFromFloat(-0.5, priceConversionObj), '-1/2');
 		
 	});
@@ -199,8 +201,8 @@ describe('Convert to a single-fractional from a number', function(){
 		assert.equal(fracker.toFractionalFromFloat(33.25, priceConversionObj), '33 1/4');
 		assert.equal(fracker.toFractionalFromFloat(43.5, priceConversionObj), '43 2/4');
 		assert.equal(fracker.toFractionalFromFloat(193.75, priceConversionObj), '193 3/4');
-		assert.equal(fracker.toFractionalFromFloat(.75, priceConversionObj), '3/4');
-		assert.equal(fracker.toFractionalFromFloat(-.75, priceConversionObj), '-3/4');
+		assert.equal(fracker.toFractionalFromFloat(0.75, priceConversionObj), '3/4');
+		assert.equal(fracker.toFractionalFromFloat(-0.75, priceConversionObj), '-3/4');
 	});
 
 	it('eights to string', function() {
@@ -414,14 +416,14 @@ describe('Convert multi-fractional string to number', function() {
 		assert.equal(fracker.incrementFractional("77'01.5", priceConversionObj), "77'02.0");
 		assert.equal(fracker.incrementFractional("77'02.0", priceConversionObj), "77'02.5");
 	});
-	xit('should decrement a multi-fractional correctly', function() {
+	it('should decrement a multi-fractional correctly', function() {
 		var priceConversionObj = {
 			base: 2,
-			primaryDivisor: 8,
-			secondaryDivisor: 1
+			primaryDivisor: 4,
+			secondaryDivisor: 2
 		};
-		assert.equal(fracker.incrementFractional("77'1.0", priceConversionObj), 77.25);
-		assert.equal(fracker.incrementFractional("77'1.1", priceConversionObj), 77.25);
-		assert.equal(fracker.incrementFractional("77", priceConversionObj), 77.25);
+		assert.equal(fracker.decrementFractional("77'1.0", priceConversionObj), "77'00.5");
+		assert.equal(fracker.decrementFractional("77'1.1", priceConversionObj), "77'00.5");
+		assert.equal(fracker.decrementFractional("77", priceConversionObj), "76'03.5");
 	});
 });
