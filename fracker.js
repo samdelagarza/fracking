@@ -1,115 +1,108 @@
-var
-getRemainder = function(number){
-	var n = Math.abs(number).toString();
+var  getRemainder = function (number) {
+        var n = Math.abs(number).toString();
 
-	if(n.indexOf('.') < 0){
-		return 0;
-	}
-	
-	return (number.toString()).split('.')[1];
-},
-isFloat = function(number){
-	return  (Math.abs(number) % 1) > 0;
-},
-isNegative = function(number) {
-	return number.toString().indexOf('-')>-1;
-},
-isMultiFractional = function(number, displayType) {
-	return displayType.secondaryDivisor != 1 || number.indexOf("'") > -1;
-},
-getFixedLength = function(number, displayType) {
-	var fixedLength = (displayType.primaryDivisor.toString()).length-1,
-	remainderLen = getRemainder(number) === 0 ? 
-					0 : 
-					(getRemainder(number).toString()).length;
+        if (n.indexOf('.') < 0) {
+            return 0;
+        } 
 
-	fixedLength = remainderLen > fixedLength ? 
-	remainderLen : 
-	fixedLength;
+        return (number.toString()).split('.')[1];
+    },
+    isFloat = function (number) {
+        return  (Math.abs(number) % 1) > 0;
+    },
+    isNegative = function (number) {
+        return number.toString().indexOf('-') > -1;
+    },
+    isMultiFractional = function (number, displayType) {
+        return displayType.secondaryDivisor !== 1 || number.indexOf("'") > -1;
+    },
+    getFixedLength = function (number, displayType) {
+        var fixedLength = (displayType.primaryDivisor.toString()).length - 1,
+            remainderLen = getRemainder(number) === 0 ?
+                0 :
+                (getRemainder(number).toString()).length;
 
-	return fixedLength;
-},
-getParts = function (number, delimiter) {
-	var n, wholeNumber, remainder, fractional;
+        fixedLength = remainderLen > fixedLength ?
+            remainderLen :
+            fixedLength;
 
-	n = (number).toString().split(delimiter);
-	wholeNumber = n[0];
-	remainder = n[1];
+        return fixedLength;
+    },
+    getParts = function (number, delimiter) {
+        var n, wholeNumber, remainder, fractional;
 
-	return [wholeNumber, remainder];
-},
-getMinMove = function(displayType){
-	return 1/(displayType.primaryDivisor * displayType.secondaryDivisor);
-},
-incrementValue = function(number, displayType){
+        n = (number).toString().split(delimiter);
+        wholeNumber = n[0];
+        remainder = n[1];
 
-},
-decrementValue = function(number, displayType){
+        return [wholeNumber, remainder];
+    },
+    getMinMove = function (displayType) {
+        return 1 / (displayType.primaryDivisor * displayType.secondaryDivisor);
+    },
+    convertToFractional = function (parts, displayType) {
+        var digits = parts[1].toString().length,
+            decimalPlaces = Math.pow(10, digits),
+            factor = decimalPlaces / displayType.primaryDivisor,
+            wholeNumber =  parts[0].replace('-','') === '0' ? '' : parts[0] + ' ',
+            primaryDivisorDecimal = 1 / displayType.primaryDivisor,
+            numerator, denominator, result, decimal, quotient, remainder, wholeQuotient;
 
-},
-convertToFractional = function(parts, displayType) {
-	var digits = parts[1].toString().length,
-		decimalPlaces = Math.pow(10, digits),
-		factor = decimalPlaces / displayType.primaryDivisor,
-		wholeNumber = parts[0] == 0 ? '' : parts[0] + ' ',
-		primaryDivisorDecimal = 1/displayType.primaryDivisor,
-		numerator, denominator, result, decimal, quotient, remainder, wholeQuotient;
+        if (parts[0] === 0 && parts[1] === 0) {
+            return "0'00.0";
+        }
 
-	if(parts[0] === 0 && parts[1] === 0){
-		return "0'00.0";
-	} 
+        if (isMultiFractional(parts.join('.'), displayType)) {
+            result = wholeNumber.toString().replace(/\s/g, '');
+            result = result.length === 0 ? 0 : result;
 
-	if(isMultiFractional(parts.join('.'), displayType)){
-		result = wholeNumber.toString().replace(/\s/g,'');
-		result = result.length === 0 ? 0 : result;
+            decimal = parseFloat('.' + parts[1]);
+            quotient = decimal / primaryDivisorDecimal;
 
-		decimal = parseFloat('.'+parts[1]);
-		quotient  = decimal/primaryDivisorDecimal;
+            if (quotient === 1) {
+                result = result + "'0" + quotient + ".0";
+            } else {
+                // console.log('decimal: ', decimal);
+                // console.log('quotient: ', quotient);
+                // console.log('primaryDivisorDecimal: ', primaryDivisorDecimal);
+                // console.log('here')
 
-		if(quotient == 1){
-			result = result + "'0"+quotient+".0";
-		} else {
-			// console.log('decimal: ', decimal);
-			// console.log('quotient: ', quotient);
-			// console.log('primaryDivisorDecimal: ', primaryDivisorDecimal);
-			// console.log('here')
-			
-			// console.log('remainder: ', remainder);
+                // console.log('remainder: ', remainder);
 
-			wholeQuotient = quotient.toString().split('.')[0];
-			remainder = quotient.toString().split('.')[1] || 0;
+                wholeQuotient = quotient.toString().split('.')[0];
+                remainder = quotient.toString().split('.')[1] || 0;
 
-			// pad number
-			if(quotient < 10){
-				wholeQuotient = '0' + wholeQuotient;
-			}
-			// console.log('wholeQuotient: ', wholeQuotient)
-			// console.log('quotient: ', quotient)
-			// console.log('remainder: ', remainder);
+                // pad number
+                if (quotient < 10) {
+                    wholeQuotient = '0' + wholeQuotient;
+                }
+                // console.log('wholeQuotient: ', wholeQuotient)
+                // console.log('quotient: ', quotient)
+                // console.log('remainder: ', remainder);
 
-			result = (isNegative(parts[0]) ? '-':'') + result + "'"+wholeQuotient + "." + remainder;
-			// console.log(result)
-		}
+                result = (isNegative(parts[0]) ? '-' : '') + result + "'" + wholeQuotient + "." + remainder;
+                // console.log(result)
+            }
 
-	} else {
-		numerator = parts[1] / factor;
-		denominator = decimalPlaces / factor;
+        } else {
+            numerator = parts[1] / factor;
+            denominator = decimalPlaces / factor;
 
-		result = (isNegative(parts[0]) ? '-':'') + wholeNumber + 
-					numerator + '/' + denominator;
-	}
+            result = (isNegative(parts[0]) ? '-' : '') + wholeNumber +
+                numerator + '/' + denominator;
+        }
 
-		// console.log('number: ', parts[0]);
-		// console.log('wholeNumber: ', parts[0]);
-		// console.log(numerator);
-		// console.log(denominator);
+        // console.log('number: ', parts[0]);
+        // console.log('wholeNumber: ', parts[0]);
+        // console.log(numerator);
+        // console.log(denominator);
 
-	return result;
-},
-convertFractionalRemainderToDecimal = function(remainder, displayType){
-	var appendix='', remainder, remainderString = remainder +'';
+        return result;
+    },
+    convertFractionalRemainderToDecimal = function (remainder, displayType) {
+        var appendix = '', remainderString = remainder + '';
 
-	if(displayType.secondaryDivisor!=10){
+        if (displayType.secondaryDivisor !== 10) {
 // console.log('remainder: ', remainder);		// expand the decimals
             if (remainderString.indexOf('.2') > -1 || remainderString.indexOf('.7') > -1) {
                 appendix = '5';
@@ -129,6 +122,12 @@ convertFractionalRemainderToDecimal = function(remainder, displayType){
 
 // console.log('result ==> ',((remainder / displayType.primaryDivisor).toFixed(9)).replace('0.','.'));
         return ((remainder / displayType.primaryDivisor).toFixed(9)).replace('0.', '.');
+    },
+    roundToNearestMinMove = function (number, displayType) {
+        var minMove = getMinMove(displayType),
+            remainder = number % minMove;
+
+        return parseFloat((number - remainder + ((remainder < (minMove / 2)) ? 0.0 : minMove)).toFixed(9));
     },
     convertToFloat = function (numberString, displayType) {
         var spaceToken = ' ', fractionToken = '/', multiFractionalToken = "'",
@@ -162,20 +161,15 @@ convertFractionalRemainderToDecimal = function(remainder, displayType){
 // console.log('result: ', roundToNearestMinMove(result, displayType));
         return roundToNearestMinMove(result, displayType);
     },
-    roundToNearestMinMove = function (number, displayType) {
-        var minMove = getMinMove(displayType),
-            remainder = number % minMove;
-
-        return parseFloat((number - remainder + ((remainder < (minMove / 2)) ? 0.0 : minMove)).toFixed(9));
-    },
     f = {
         toStringFromFloat:function (number, displayType) {
-            var fixedLength = 0, val,
-                displayType = displayType || {
-                    base:10,
-                    primaryDivisor:1,
-                    secondaryDivisor:1
-                };
+            var fixedLength = 0, val;
+
+            displayType = displayType || {
+                base:10,
+                primaryDivisor:1,
+                secondaryDivisor:1
+            };
 
             if (displayType.base === 10) {
                 fixedLength = getFixedLength(number, displayType);
@@ -196,7 +190,7 @@ convertFractionalRemainderToDecimal = function(remainder, displayType){
         },
         toFractionalFromFloat:function (number, displayType) {
             var numberParts,
-                isMultiFractional = displayType.secondaryDivisor != 1;
+                isMultiFractional = displayType.secondaryDivisor !== 1;
 
             if (displayType.base === 2) {
                 if (isFloat(number)) {

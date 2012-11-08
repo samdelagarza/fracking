@@ -5,7 +5,7 @@
     "author":"sam de la garza",
     "dependencies":{
         "grunt-simple-mocha":">= 0.2.0",
-	"mocha":"1.7.x"
+        "mocha":"1.7.x"
     },
     "homepage":"https://github.com/samdelagarza/fracking"
 }

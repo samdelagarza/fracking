@@ -13,7 +13,7 @@ module.exports = function (grunt) {
                 'TradeStation Technologies, Inc. All rights reserved; Licensed MIT */'
         },
         lint:{
-            files:['grunt.js', 'lib/**/*.js', 'test/**/*.js']
+            files:['grunt.js', './*.js', 'test/**/*.js']
         },
         /* not using this */
         test:{
@@ -33,7 +33,7 @@ module.exports = function (grunt) {
         },
         watch:{
             files:'<config:lint.files>',
-            tasks:'lint test'
+            tasks:'lint simplemocha'
         },
         jshint:{
             options:{
@@ -48,7 +48,9 @@ module.exports = function (grunt) {
                 boss:true,
                 eqnull:true
             },
-            globals:{}
+            globals:{
+                exports:true
+            }
         },
         uglify:{},
         simplemocha:{
