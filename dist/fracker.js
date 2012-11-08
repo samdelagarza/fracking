@@ -1,4 +1,9 @@
-var
+/*! fracking - v0.1.0 - 2012-11-08
+* https://github.com/samdelagarza/fracking
+* Copyright (c) 2012 TradeStation Technologies, Inc. All rights reserved; Licensed MIT */
+
+//  Copyright (c) 2012 TradeStation Technologies, Inc. All rights reserved.
+var 
 getRemainder = function(number){
 	var n = Math.abs(number).toString();
 
