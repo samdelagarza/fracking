@@ -29,7 +29,7 @@ var getRemainder = function (number) {
         return fixedLength;
     },
     getParts = function (number, delimiter) {
-        var n, wholeNumber, remainder, fractional;
+        var n, wholeNumber, remainder;
 
         n = (number).toString().split(delimiter);
         wholeNumber = n[0];
@@ -84,7 +84,8 @@ var getRemainder = function (number) {
         return result;
     },
     convertFractionalRemainderToDecimal = function (remainder, displayType) {
-        var appendix = '', remainderString = remainder + '';
+        var appendix = '',
+            remainderString = remainder + "";
 
         if (displayType.secondaryDivisor !== 10) {
             if (remainderString.indexOf('.2') > -1 || remainderString.indexOf('.7') > -1) {
@@ -141,9 +142,7 @@ var getRemainder = function (number) {
             if (displayType.base === 10) {
                 fixedLength = getFixedLength(number, displayType);
 
-                val = number === 0 ?
-                    number.toFixed(fixedLength) :
-                    number.toFixed(fixedLength);
+                val = number.toFixed(fixedLength);
 
                 return val.toString();
             } else if (displayType.base === 2) {
@@ -182,7 +181,6 @@ var getRemainder = function (number) {
     };
 
 exports.fracker = {
-    // TODO: is this one really needed?
     toStringFromFloat:f.toStringFromFloat,
     toFractionalFromFloat:f.toFractionalFromFloat,
     toFloatFromFractional:f.toFloatFromFractional,
@@ -190,29 +188,4 @@ exports.fracker = {
     decrementFractional:f.decrementFractional,
     incrementFloat:f.incrementFloat,
     decrementFloat:f.decrementFloat
-};	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+};
