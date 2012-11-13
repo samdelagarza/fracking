@@ -1,3 +1,5 @@
+/*globals module, define */
+(function (root, undefined) {
     var getRemainder = function (number) {
             var n = Math.abs(number).toString();
 
@@ -76,7 +78,7 @@
 
                     // for multi-fractionals only, truncate the number to
                     // display only a remainder to the 10s position.
-                    remainder = (remainder).toString().substring(0,1);
+                    remainder = (remainder).toString().substring(0, 1);
 
                     // pad number
                     if (quotient < 10) {
@@ -229,31 +231,46 @@
             return (displayType.base === 2) ?
                 decrementFractional(number, displayType, minMoveFactor) :
                 decrementFloat(number, displayType, minMoveFactor);
+        },
+
+        lib = {
+            /**
+             * normalize decimals for display, including zero padding
+             */
+            toStringFromFloat:toStringFromFloat,
+
+            /**
+             * convert in order to display or after min-moves
+             */
+            toFractionalFromFloat:toFractionalFromFloat,
+
+            /**
+             * convert in order to send orders
+             */
+            toFloatFromFractional:toFloatFromFractional,
+
+            /**
+             * increment by the security's min-moves
+             */
+            increment:increment,
+
+            /**
+             * decrement by the security's min-moves
+             */
+            decrement:decrement
         };
 
-exports.fracker = {
-        /**
-         * normalize decimals for display, including zero padding
-         */
-        toStringFromFloat:toStringFromFloat,
-
-        /**
-         * convert in order to display or after min-moves
-         */
-        toFractionalFromFloat:toFractionalFromFloat,
-
-        /**
-         * convert in order to send orders
-         */
-        toFloatFromFractional:toFloatFromFractional,
-
-        /**
-         * increment by the security's min-moves
-         */
-        increment:increment,
-
-        /**
-         * decrement by the security's min-moves
-         */
-        decrement:decrement
-};
+    // export for commonjs or as an amd module, otherwise
+    // add fracker as a global variable.
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = lib;
+        lib.fracker = lib;
+    } else if (typeof define === 'function' && define.amd) {
+        // return as an amd module
+        define([], function () {
+            return lib;
+        });
+    } else {
+        root['fracker'] = lib;
+    }
+}(this));
