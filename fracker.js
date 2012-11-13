@@ -18,7 +18,7 @@
         isMultiFractional = function (number, displayType) {
             return displayType.secondaryDivisor !== 1 || number.toString().indexOf("'") > -1;
         },
-        getFixedLength = function (number, displayType) {
+        getPrecision = function (number, displayType) {
             var fixedLength = (displayType.primaryDivisor.toString()).length - 1,
                 remainderLen = getRemainder(number) === 0 ?
                     0 :
@@ -43,9 +43,12 @@
 
             return [wholeNumber, remainder];
         },
-        getMinMove = function (displayType, minMoveFactor) {
-            var priceScale = 1 /
+        getPriceScale = function(displayType){
+            return 1 /
                 (displayType.primaryDivisor * displayType.secondaryDivisor);
+        },
+        getMinMove = function (displayType, minMoveFactor) {
+            var priceScale = getPriceScale(displayType);
             minMoveFactor = minMoveFactor || 1;
 
             return priceScale * minMoveFactor;
@@ -164,7 +167,7 @@
             };
 
             if (displayType.base === 10) {
-                fixedLength = getFixedLength(number, displayType);
+                fixedLength = getPrecision(number, displayType);
 
                 val = number.toFixed(fixedLength);
 
@@ -257,7 +260,17 @@
             /**
              * decrement by the security's min-moves
              */
-            decrement:decrement
+            decrement:decrement,
+
+            /**
+             * get price scale
+             */
+            getPriceScale:getPriceScale,
+
+            /**
+             * get display precision
+             */
+            getPrecision:getPrecision
         };
 
     // export for commonjs or as an amd module, otherwise
