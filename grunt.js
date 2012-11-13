@@ -17,7 +17,7 @@ module.exports = function (grunt) {
         },
         /* not using this */
         test:{
-            files:['test/**/*.js']
+		tasks: 'simplemocha'
         },
         concat:{
             dist:{
