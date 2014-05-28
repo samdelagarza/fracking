@@ -43,13 +43,31 @@
 
             return [wholeNumber, remainder];
         },
-        getPriceScale = function(displayType){
+        getPriceScale = function (displayType) {
             return 1 /
                 (displayType.primaryDivisor * displayType.secondaryDivisor);
         },
-        getMinMove = function (displayType, minMoveFactor) {
-            var priceScale = getPriceScale(displayType);
+        getMinMove = function (price, displayType, minMoveFactor, direction) {
+            var priceScale = getPriceScale(displayType),
+                threshold, minMoveStr, lowMove, highMove, increment = 1;
             minMoveFactor = minMoveFactor || 1;
+
+
+            if (minMoveFactor < 0) {
+                threshold = Math.floor(Math.abs(minMoveFactor));
+                minMoveStr = minMoveFactor.toString();
+                lowMove = Number(minMoveStr.substr(minMoveStr.indexOf('.') + 1, 2));
+                // User Story #43867 - round the remainder
+                highMove = Math.round(+('.' + minMoveStr.substr(minMoveStr.indexOf('.') + 3)) * 100);
+
+                if ((direction === increment ?
+                    price >= threshold :
+                    price > threshold)) {
+                    minMoveFactor = highMove;
+                } else {
+                    minMoveFactor = lowMove;
+                }
+            }
 
             return priceScale * minMoveFactor;
         },
@@ -123,32 +141,31 @@
             }
             return ((remainder / displayType.primaryDivisor).toFixed(9)).replace('0.', '.');
         },
-        roundToNearestMinMove = function (number, displayType, minMoveFactor) {
-            var minMove = getMinMove(displayType, minMoveFactor),
-                remainder = number % minMove;
-
-            return parseFloat((number - remainder +
+        roundToNearestMinMove = function (price, displayType, minMoveFactor) {
+            var minMove = getMinMove(price, displayType, minMoveFactor),
+                remainder = price % minMove;
+            return parseFloat((price - remainder +
                 ((remainder < (minMove / 2)) ? 0.0 : minMove)).toFixed(9));
         },
-        convertToFloat = function (numberString, displayType, minMoveFactor) {
+        convertToFloat = function (priceString, displayType, minMoveFactor) {
             var spaceToken = ' ', fractionToken = '/', multiFractionalToken = "'",
                 remainder = 0, wholeNumber, fractionString, result;
 
-            if (typeof numberString !== 'string') {
-                numberString = numberString.toString();
+            if (typeof priceString !== 'string') {
+                priceString = priceString.toString();
             }
 
-            if (isMultiFractional(numberString, displayType)) {
-                wholeNumber = parseInt(numberString.split(multiFractionalToken)[0], 10);
-                remainder = parseFloat(numberString.split(multiFractionalToken)[1]);
+            if (isMultiFractional(priceString, displayType)) {
+                wholeNumber = parseInt(priceString.split(multiFractionalToken)[0], 10);
+                remainder = parseFloat(priceString.split(multiFractionalToken)[1]);
 
                 result = parseFloat(wholeNumber +
                     convertFractionalRemainderToDecimal(remainder, displayType));
             } else {
-                wholeNumber = parseInt(numberString.split(spaceToken)[0], 10);
-                fractionString = numberString.split(spaceToken)[1];
+                wholeNumber = parseInt(priceString.split(spaceToken)[0], 10);
+                fractionString = priceString.split(spaceToken)[1];
 
-                if (numberString.indexOf('/') > -1) {
+                if (priceString.indexOf('/') > -1) {
                     remainder = fractionString.split(fractionToken)[0] /
                         fractionString.split(fractionToken)[1];
                 }
@@ -157,7 +174,7 @@
 
             return roundToNearestMinMove(result, displayType, minMoveFactor);
         },
-        toStringFromFloat = function (number, displayType) {
+        toStringFromFloat = function (price, displayType) {
             var fixedLength = 0, val;
 
             displayType = displayType || {
@@ -167,73 +184,74 @@
             };
 
             if (displayType.base === 10) {
-                fixedLength = getPrecision(number, displayType);
+                fixedLength = getPrecision(price, displayType);
 
-                val = number.toFixed(fixedLength);
+                val = price.toFixed(fixedLength);
 
                 return val.toString();
             } else if (displayType.base === 2) {
-                return number;
+                return price;
             }
         },
-        toFractionalFromFloat = function (number, displayType) {
+        toFractionalFromFloat = function (price, displayType) {
             var numberParts,
                 isMultiFractional = displayType.secondaryDivisor !== 1;
 
             if (displayType.base === 2) {
-                if (isFloat(number)) {
-                    numberParts = getParts(number, '.');
+                if (isFloat(price)) {
+                    numberParts = getParts(price, '.');
 
                     return convertToFractional(numberParts, displayType);
                 } else {
-                    return isMultiFractional ? number + "'00.0" : number;
+                    return isMultiFractional ? price + "'00.0" : price;
                 }
             }
         },
-        toFloatFromFractional = function (numberString, displayType, minMoveFactor) {
+        toFloatFromFractional = function (priceString, displayType, minMoveFactor) {
+            priceString = priceString || 0;
             if (displayType.base !== 10) {
-                return convertToFloat(numberString, displayType, minMoveFactor);
+                return convertToFloat(priceString, displayType, minMoveFactor);
             }
 
-            return numberString;
+            return priceString;
         },
-        incrementFractional = function (numberString, displayType, minMoveFactor) {
-            var n = toFloatFromFractional(numberString, displayType, minMoveFactor),
-                minMove = getMinMove(displayType, minMoveFactor, minMoveFactor);
+        incrementFractional = function (priceString, displayType, minMoveFactor) {
+            var n = toFloatFromFractional(priceString, displayType, minMoveFactor),
+                minMove = getMinMove(priceString, displayType, minMoveFactor, 1);
 
             return toFractionalFromFloat(n + minMove, displayType);
         },
-        decrementFractional = function (numberString, displayType, minMoveFactor) {
-            var n = toFloatFromFractional(numberString, displayType, minMoveFactor),
-                minMove = getMinMove(displayType, minMoveFactor, minMoveFactor);
+        decrementFractional = function (priceString, displayType, minMoveFactor) {
+            var n = toFloatFromFractional(priceString, displayType, minMoveFactor),
+                minMove = getMinMove(priceString, displayType, minMoveFactor, minMoveFactor, -1);
 
             return toFractionalFromFloat(n - minMove, displayType);
         },
-        incrementFloat = function (number, displayType, minMoveFactor) {
-            var minMove = getMinMove(displayType, minMoveFactor, minMoveFactor);
-            number = number.length === 0 ? 0 : number;
-            number = parseFloat(number);
-            return toStringFromFloat(number + minMove, displayType);
+        incrementFloat = function (price, displayType, minMoveFactor) {
+            var minMove = getMinMove(price, displayType, minMoveFactor, 1);
+            price = price.length === 0 ? 0 : price;
+            price = parseFloat(price);
+            return toStringFromFloat(price + minMove, displayType);
         },
-        decrementFloat = function (number, displayType, minMoveFactor) {
-            var minMove = getMinMove(displayType, minMoveFactor, minMoveFactor);
-            number = number.length === 0 ? 0 : number;
-            number = parseFloat(number);
-            return toStringFromFloat(number - minMove, displayType);
+        decrementFloat = function (price, displayType, minMoveFactor) {
+            var minMove = getMinMove(price, displayType, minMoveFactor, -1);
+            price = price.length === 0 ? 0 : price;
+            price = parseFloat(price);
+            return toStringFromFloat(price - minMove, displayType);
         },
-        increment = function (number, displayType, minMoveFactor) {
-            number = number.length === 0 ? 0 : number;
+        increment = function (price, displayType, minMoveFactor) {
+            price = !price ? 0 : price;
 
             return  (displayType.base === 2) ?
-                incrementFractional(number, displayType, minMoveFactor) :
-                incrementFloat(number, displayType, minMoveFactor);
+                incrementFractional(price, displayType, minMoveFactor) :
+                incrementFloat(price, displayType, minMoveFactor);
         },
-        decrement = function (number, displayType, minMoveFactor) {
-            number = number.length === 0 ? 0 : number;
+        decrement = function (price, displayType, minMoveFactor) {
+            price = !price ? 0 : price;
 
             return (displayType.base === 2) ?
-                decrementFractional(number, displayType, minMoveFactor) :
-                decrementFloat(number, displayType, minMoveFactor);
+                decrementFractional(price, displayType, minMoveFactor) :
+                decrementFloat(price, displayType, minMoveFactor);
         },
 
         lib = {
