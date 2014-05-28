@@ -1,5 +1,5 @@
 {
-    "name":"fracking.js",
+    "name":"fracking",
     "version":"0.1.0",
     "description":"A tiny library to facilitate fractional to decimal conversion for security trading.",
     "author":"sam de la garza",
